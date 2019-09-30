@@ -75,13 +75,6 @@ async def ddl_call_back(bot, update):
                 l = entity.length
                 youtube_dl_url = youtube_dl_url[o:o + l]
     description = Translation.CUSTOM_CAPTION_UL_FILE
-    if ("@" in custom_file_name) and (str(update.from_user.id) not in Config.UTUBE_BOT_USERS):
-        await bot.edit_message_text(
-            chat_id=update.message.chat.id,
-            text=Translation.NOT_AUTH_USER_TEXT,
-            message_id=update.message.message_id
-        )
-        return
     start = datetime.now()
     await bot.edit_message_text(
         text=Translation.DOWNLOAD_START,
@@ -269,7 +262,6 @@ async def ddl_call_back(bot, update):
 
 
 async def download_coroutine(bot, session, url, file_name, chat_id, message_id, start):
-    CHUNK_SIZE = 2341
     downloaded = 0
     display_message = ""
     async with session.get(url, timeout=Config.PROCESS_MAX_TIMEOUT) as response:
@@ -286,11 +278,11 @@ File Size: {}""".format(url, humanbytes(total_length))
         )
         with open(file_name, "wb") as f_handle:
             while True:
-                chunk = await response.content.read(CHUNK_SIZE)
+                chunk = await response.content.read(Config.CHUNK_SIZE)
                 if not chunk:
                     break
                 f_handle.write(chunk)
-                downloaded += CHUNK_SIZE
+                downloaded += Config.CHUNK_SIZE
                 now = time.time()
                 diff = now - start
                 if round(diff % 5.00) == 0 or downloaded == total_length:
