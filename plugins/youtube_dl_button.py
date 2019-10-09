@@ -97,13 +97,6 @@ async def youtube_dl_call_back(bot, update):
                 o = entity.offset
                 l = entity.length
                 youtube_dl_url = youtube_dl_url[o:o + l]
-    if (update.from_user.id not in Config.UTUBE_BOT_USERS) and (("hls" in youtube_dl_format) or ("hotstar.com" in youtube_dl_url)):
-        await bot.edit_message_text(
-            chat_id=update.message.chat.id,
-            text=Translation.NOT_AUTH_USER_TEXT,
-            message_id=update.message.message_id
-        )
-        return
     await bot.edit_message_text(
         text=Translation.DOWNLOAD_START,
         chat_id=update.message.chat.id,
@@ -144,7 +137,7 @@ async def youtube_dl_call_back(bot, update):
             "--hls-prefer-ffmpeg", youtube_dl_url,
             "-o", download_directory
         ]
-    if "hotstar.com" in youtube_dl_url and Config.HTTP_PROXY != "":
+    if Config.HTTP_PROXY != "":
         command_to_exec.append("--proxy")
         command_to_exec.append(Config.HTTP_PROXY)
     if youtube_dl_username is not None:
@@ -197,7 +190,6 @@ async def youtube_dl_call_back(bot, update):
                 message_id=update.message.message_id
             )
         else:
-            # is_w_f = update.from_user.id not in Config.SUPER7X_DLBOT_USERS
             is_w_f = False
             images = await generate_screen_shots(
                 download_directory,
@@ -267,8 +259,7 @@ async def youtube_dl_call_back(bot, update):
                     progress=progress_for_pyrogram,
                     progress_args=(
                         Translation.UPLOAD_START,
-                        update.message.message_id,
-                        update.message.chat.id,
+                        update.message,
                         start_time
                     )
                 )
@@ -284,8 +275,7 @@ async def youtube_dl_call_back(bot, update):
                     progress=progress_for_pyrogram,
                     progress_args=(
                         Translation.UPLOAD_START,
-                        update.message.message_id,
-                        update.message.chat.id,
+                        update.message,
                         start_time
                     )
                 )
@@ -300,8 +290,7 @@ async def youtube_dl_call_back(bot, update):
                     progress=progress_for_pyrogram,
                     progress_args=(
                         Translation.UPLOAD_START,
-                        update.message.message_id,
-                        update.message.chat.id,
+                        update.message,
                         start_time
                     )
                 )
@@ -321,8 +310,7 @@ async def youtube_dl_call_back(bot, update):
                     progress=progress_for_pyrogram,
                     progress_args=(
                         Translation.UPLOAD_START,
-                        update.message.message_id,
-                        update.message.chat.id,
+                        update.message,
                         start_time
                     )
                 )
