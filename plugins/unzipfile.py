@@ -36,8 +36,6 @@ if not os.path.isdir(extracted):
 
 @pyrogram.Client.on_message(pyrogram.Filters.command(["zipcikar"]))
 async def unzip(bot, update):
-    if bot.fwd_from:
-        return
     
     if update.from_user.id not in Config.AUTH_USERS:
         
