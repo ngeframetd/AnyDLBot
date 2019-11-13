@@ -28,7 +28,7 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 from helper_funcs.chat_base import TRChatBase
 from helper_funcs.display_progress import progress_for_pyrogram, humanbytes
 
-extracted = Config.DOWNLOAD_LOCATION + "extracted/"
+extracted = Config.DOWNLOAD_LOCATION + "/extracted/"
 thumb_image_path = Config.DOWNLOAD_LOCATION + "/thumb_image.jpg"
 if not os.path.isdir(extracted):
     os.makedirs(extracted)
