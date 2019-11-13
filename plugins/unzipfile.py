@@ -49,7 +49,7 @@ if not os.path.isdir(extracted):
 async def unzip(bot, update):
     
     mone = await bot.edit_message_text(
-            chat_id=update.chat.id,
+            chat_id=update.message_id,
             text="trying to download",
             reply_to_message_id=update.message_id
         )
@@ -57,11 +57,11 @@ async def unzip(bot, update):
         os.makedirs(Config.DOWNLOAD_LOCATION)
     # if client.send_message.chat_id:
     start = datetime.now()
-    reply_message = await bot.get_reply_message()
+    reply_to_message_id = await bot.reply_to_message_id()
     try:
         c_time = time.time()
-        downloaded_file_name = await borg.download_media(
-            reply_message,
+        downloaded_file_name = await bot.download_media(
+            reply_to_message_id,
             Config.DOWNLOAD_LOCATION,
             progress_callback=lambda d, t: asyncio.get_bot_loop().create_task(
                 progress(d, t, mone, c_time, "trying to download")
@@ -117,7 +117,7 @@ async def unzip(bot, update):
                     force_document=force_document,
                     supports_streaming=supports_streaming,
                     allow_cache=False,
-                    reply_to=bot.message.id,
+                    reply_to=update.message_id,
                     attributes=document_attributes,
                         # progress_callback=lambda d, t: asyncio.get_bot_loop().create_task(
                         #     progress(d, t, bot, c_time, "trying to upload")
@@ -127,7 +127,7 @@ async def unzip(bot, update):
                 await bot.send_message(
                     bot.chat_id,
                     "{} caused `{}`".format(caption_rts, str(e)),
-                    reply_to=bot.message.id
+                    reply_to=update.message_id
                 )
                     # some media were having some issues
                 continue
