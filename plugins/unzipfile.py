@@ -44,8 +44,7 @@ async def unzip(bot, update):
         )
         return
     TRChatBase(update.from_user.id, update.text, "unzip")
-    saved_file_path = Config.DOWNLOAD_LOCATION + \
-        "/" + str(update.from_user.id) + ".unzip.zip"
+    saved_file_path = extracted
     if os.path.exists(saved_file_path):
         os.remove(saved_file_path)
     reply_message = update.reply_to_message
@@ -81,8 +80,7 @@ async def unzip(bot, update):
                 text=Translation.SAVED_RECVD_DOC_FILE,
                 message_id=a.message_id
             )
-            extract_dir_path = Config.DOWNLOAD_LOCATION + \
-                "/" + str(update.from_user.id) + "zipped" + "/"
+            extract_dir_path = extracted
             if not os.path.isdir(extract_dir_path):
                 os.makedirs(extract_dir_path)
             await bot.edit_message_text(
@@ -100,18 +98,18 @@ async def unzip(bot, update):
                     command_to_exec, stderr=subprocess.STDOUT)
                 # https://stackoverflow.com/a/26178369/4723940
             except:
-                # try:
-                #     os.remove(saved_file_path)
-                #     shutil.rmtree(extract_dir_path)
-                # except:
-                #     pass
-                # await bot.edit_message_text(
-                #     chat_id=update.chat.id,
-                #     text=Translation.EXTRACT_ZIP_ERRS_OCCURED,
-                #     disable_web_page_preview=True,
-                #     parse_mode="html",
-                #     message_id=a.message_id
-                # )
+                try:
+                    os.remove(saved_file_path)
+                    shutil.rmtree(extract_dir_path)
+                except:
+                    pass
+                await bot.edit_message_text(
+                    chat_id=update.chat.id,
+                    text=Translation.EXTRACT_ZIP_ERRS_OCCURED,
+                    disable_web_page_preview=True,
+                    parse_mode="html",
+                    message_id=a.message_id
+                )
             else:
                 os.remove(saved_file_path)
                 inline_keyboard = []
