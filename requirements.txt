@@ -11,4 +11,3 @@ youtube-dl
 pydrive
 pySmartDL
 hachoir
-7zip-full
