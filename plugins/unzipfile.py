@@ -38,7 +38,7 @@ if not os.path.isdir(extracted):
 async def unzip(bot, update):
     if bot.fwd_from:
         return
-    mone = await bot.edit_message_text("Processing ...")
+    
     if update.from_user.id not in Config.AUTH_USERS:
         
         await bot.delete_messages(
@@ -55,15 +55,15 @@ async def unzip(bot, update):
                     reply_message,
                     Config.TMP_DOWNLOAD_DIRECTORY,
                     progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                        progress(d, t, mone, c_time, "trying to download")
+                        progress(d, t, bot.edit_message_text("Processing ..."), c_time, "trying to download")
                     )
                 )
             except Exception as e:  # pylint:disable=C0103,W0703
-            await mone.edit(str(e))
+                await bot.edit_message_text(str(e))
         else:
             end = datetime.now()
             ms = (end - start).seconds
-            await mone.edit("Stored the zip to `{}` in {} seconds.".format(downloaded_file_name, ms))    
+            await bot.edit_message_text("Stored the zip to `{}` in {} seconds.".format(downloaded_file_name, ms))    
         return
     TRChatBase(update.from_user.id, update.text, "unzip")
     for single_file in filename:
