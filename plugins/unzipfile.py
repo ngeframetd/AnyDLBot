@@ -12,7 +12,7 @@ import time
 import zipfile
 from datetime import datetime
 from zipfile import ZipFile
-
+import pyrogram
 from pyrogram import *
 from pyrogram import client
 from hachoir.metadata import extractMetadata
