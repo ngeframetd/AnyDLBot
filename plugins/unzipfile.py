@@ -45,10 +45,10 @@ async def unzip(bot, update):
     TRChatBase(update.from_user.id, update.text, "unzip")
     saved_file_path = Config.DOWNLOAD_LOCATION + \
         "/" + str(update.from_user.id) + ".unzip.zip"
-    if os.path.exists(saved_file_path):
-        os.remove(saved_file_path)
-    else:
+    if not os.path.isdir(saved_file_path):
         os.makedirs(saved_file_path)
+
+        
     reply_message = update.reply_to_message
     if ((reply_message is not None) and
         (reply_message.document is not None) and
