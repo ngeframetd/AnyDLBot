@@ -49,7 +49,7 @@ if not os.path.isdir(extracted):
 async def unzip(bot, update):
     
     mone = await bot.edit_message_text(
-            chat_id=update.message_id,
+            chat_id=update.chat.id,
             text="trying to download",
             reply_to_message_id=update.message_id
         )
