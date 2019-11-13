@@ -47,6 +47,8 @@ async def unzip(bot, update):
         "/" + str(update.from_user.id) + ".unzip.zip"
     if os.path.exists(saved_file_path):
         os.remove(saved_file_path)
+    else:
+        os.makedirs(saved_file_path)
     reply_message = update.reply_to_message
     if ((reply_message is not None) and
         (reply_message.document is not None) and
