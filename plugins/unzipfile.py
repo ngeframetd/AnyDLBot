@@ -26,8 +26,8 @@ from helper_funcs.chat_base import TRChatBase
 from helper_funcs.display_progress import progress_for_pyrogram, humanbytes
 
 
-extracted = Config.TMP_DOWNLOAD_DIRECTORY + "extracted/"
-thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
+extracted = Config.DOWNLOAD_LOCATION + "extracted/"
+thumb_image_path = Config.DOWNLOAD_LOCATION + "/thumb_image.jpg"
 if not os.path.isdir(extracted):
     os.makedirs(extracted)
 
@@ -36,8 +36,8 @@ async def _(event):
     if event.fwd_from:
         return
     mone = await bot.edit_message_text("Processing ...")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    if not os.path.isdir(Config.DOWNLOAD_LOCATION):
+        os.makedirs(Config.DOWNLOAD_LOCATION)
     if event.reply_to_msg_id:
         start = datetime.now()
         reply_message = await bot.send_message(reply_to_message_id=update.message_id)
@@ -45,7 +45,7 @@ async def _(event):
             c_time = time.time()
             downloaded_file_name = await bot.download_media(
                 reply_message,
-                Config.TMP_DOWNLOAD_DIRECTORY,
+                Config.DOWNLOAD_LOCATION,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, mone, c_time, "trying to download")
                 )
