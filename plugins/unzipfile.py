@@ -64,6 +64,9 @@ async def unzip(bot, update):
             await bot.edit_message_text("Stored the zip to `{}` in {} seconds.".format(downloaded_file_name, ms))    
         return
     TRChatBase(update.from_user.id, update.text, "unzip")
+    with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
+        zip_ref.extractall(extracted)
+    filename = sorted(get_lst_of_files(extracted, []))
     for single_file in filename:
             if os.path.exists(single_file):
                 # https://stackoverflow.com/a/678242/4723940
@@ -108,7 +111,7 @@ async def unzip(bot, update):
                             # )
                         )
                     except Exception as e:
-                        await borg.send_message(
+                        await bot.send_message(
                             event.chat_id,
                             "{} caused `{}`".format(caption_rts, str(e)),
                             reply_to=event.message.id
@@ -158,66 +161,64 @@ async def unzip(bot, update):
     #             text=Translation.EXTRACT_ZIP_INTRO_THREE,
     #             message_id=a.message_id
     #         )
-            try:
-                with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
-                    zip_ref.extractall(extracted)
-                filename = sorted(get_lst_of_files(extracted, []))
-                # https://stackoverflow.com/a/39629367/4723940
-                logger.info(command_to_exec)
-                t_response = subprocess.check_output(
-                    command_to_exec, stderr=subprocess.STDOUT)
-                # https://stackoverflow.com/a/26178369/4723940
-            except:
-                try:
-                    os.remove(saved_file_path)
-                    shutil.rmtree(extract_dir_path)
-                except:
-                    pass
-                await bot.edit_message_text(
-                    chat_id=update.chat.id,
-                    text=Translation.EXTRACT_ZIP_ERRS_OCCURED,
-                    disable_web_page_preview=True,
-                    parse_mode="html",
-                    message_id=a.message_id
-                )
-            else:
-                os.remove(saved_file_path)
-                inline_keyboard = []
-                zip_file_contents = os.listdir(extract_dir_path)
-                i = 0
-                for current_file in zip_file_contents:
-                    cb_string = "ZIP:{}:ZIP".format(str(i))
-                    inline_keyboard.append([
-                        pyrogram.InlineKeyboardButton(
-                            current_file,
-                            callback_data=cb_string.encode("UTF-8")
-                        )
-                    ])
-                    i = i + 1
-                cb_string = "ZIP:{}:ZIP".format("ALL")
-                inline_keyboard.append([
-                    pyrogram.InlineKeyboardButton(
-                        "Upload All Files",
-                        callback_data=cb_string.encode("UTF-8")
-                    )
-                ])
-                cb_string = "ZIP:{}:ZIP".format("NONE")
-                inline_keyboard.append([
-                    pyrogram.InlineKeyboardButton(
-                        "Cancel",
-                        callback_data=cb_string.encode("UTF-8")
-                    )
-                ])
-                reply_markup = pyrogram.InlineKeyboardMarkup(inline_keyboard)
-                await bot.edit_message_text(
-                    chat_id=update.chat.id,
-                    text=Translation.EXTRACT_ZIP_STEP_TWO,
-                    message_id=a.message_id,
-                    reply_markup=reply_markup,
-                )
-    else:
-        await bot.send_message(
-            chat_id=update.chat.id,
-            text=Translation.EXTRACT_ZIP_INTRO_ONE,
-            reply_to_message_id=update.message_id
-        )
+    #         try:
+                
+    #             # https://stackoverflow.com/a/39629367/4723940
+    #             logger.info(command_to_exec)
+    #             t_response = subprocess.check_output(
+    #                 command_to_exec, stderr=subprocess.STDOUT)
+    #             # https://stackoverflow.com/a/26178369/4723940
+    #         except:
+    #             try:
+    #                 os.remove(saved_file_path)
+    #                 shutil.rmtree(extract_dir_path)
+    #             except:
+    #                 pass
+    #             await bot.edit_message_text(
+    #                 chat_id=update.chat.id,
+    #                 text=Translation.EXTRACT_ZIP_ERRS_OCCURED,
+    #                 disable_web_page_preview=True,
+    #                 parse_mode="html",
+    #                 message_id=a.message_id
+    #             )
+    #         else:
+    #             os.remove(saved_file_path)
+    #             inline_keyboard = []
+    #             zip_file_contents = os.listdir(extract_dir_path)
+    #             i = 0
+    #             for current_file in zip_file_contents:
+    #                 cb_string = "ZIP:{}:ZIP".format(str(i))
+    #                 inline_keyboard.append([
+    #                     pyrogram.InlineKeyboardButton(
+    #                         current_file,
+    #                         callback_data=cb_string.encode("UTF-8")
+    #                     )
+    #                 ])
+    #                 i = i + 1
+    #             cb_string = "ZIP:{}:ZIP".format("ALL")
+    #             inline_keyboard.append([
+    #                 pyrogram.InlineKeyboardButton(
+    #                     "Upload All Files",
+    #                     callback_data=cb_string.encode("UTF-8")
+    #                 )
+    #             ])
+    #             cb_string = "ZIP:{}:ZIP".format("NONE")
+    #             inline_keyboard.append([
+    #                 pyrogram.InlineKeyboardButton(
+    #                     "Cancel",
+    #                     callback_data=cb_string.encode("UTF-8")
+    #                 )
+    #             ])
+    #             reply_markup = pyrogram.InlineKeyboardMarkup(inline_keyboard)
+    #             await bot.edit_message_text(
+    #                 chat_id=update.chat.id,
+    #                 text=Translation.EXTRACT_ZIP_STEP_TWO,
+    #                 message_id=a.message_id,
+    #                 reply_markup=reply_markup,
+    #             )
+    # else:
+    #     await bot.send_message(
+    #         chat_id=update.chat.id,
+    #         text=Translation.EXTRACT_ZIP_INTRO_ONE,
+    #         reply_to_message_id=update.message_id
+    #     )
