@@ -9,3 +9,5 @@ requests
 tgcrypto
 youtube-dl
 pydrive
+pySmartDL
+hachoir
