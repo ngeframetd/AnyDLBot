@@ -33,7 +33,7 @@ thumb_image_path = Config.DOWNLOAD_LOCATION + "/thumb_image.jpg"
 if not os.path.isdir(extracted):
     os.makedirs(extracted)
 
-@pyrogram.Client.on_message(pyrogram.Filters.command(["unzip"]))
+@pyrogram.Client.on_message(pyrogram.Filters.command(["zipcikar"]))
 async def unzip(bot, update):
     if update.from_user.id not in Config.AUTH_USERS:
         await bot.delete_messages(
