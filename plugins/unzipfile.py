@@ -54,7 +54,7 @@ async def unzip(bot, update):
         )
     if not os.path.isdir(Config.DOWNLOAD_LOCATION):
         os.makedirs(Config.DOWNLOAD_LOCATION)
-    if bot.reply_to_message_id:
+    # if bot.reply_to_message_id:
         start = datetime.now()
         reply_message = await bot.get_reply_message()
         try:
