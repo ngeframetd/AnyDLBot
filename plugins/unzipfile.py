@@ -12,7 +12,7 @@ import time
 import zipfile
 from datetime import datetime
 from zipfile import ZipFile
-from bot import app
+
 from pyrogram import *
 from pyrogram import client
 from hachoir.metadata import extractMetadata
@@ -55,7 +55,7 @@ async def unzip(bot, update,client):
         )
     if not os.path.isdir(Config.DOWNLOAD_LOCATION):
         os.makedirs(Config.DOWNLOAD_LOCATION)
-    if app.send_message.chat_id:
+    if client.send_message.chat_id:
         start = datetime.now()
         reply_message = await bot.get_reply_message()
         try:
