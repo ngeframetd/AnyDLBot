@@ -47,11 +47,10 @@ if not os.path.isdir(extracted):
 @pyrogram.Client.on_message(pyrogram.Filters.command(["zipcikar"]))
 async def unzip(bot, update):
     
-    mone = await bot.edit_message_text(
-        chat_id=update.chat.id,
-        message_ids=update.message_id,
-        revoke=True,
-        text="trying to download"
+    mone = a = await bot.send_message(
+            chat_id=update.chat.id,
+            text="trying to download",
+            reply_to_message_id=update.message_id
         )
     if not os.path.isdir(Config.DOWNLOAD_LOCATION):
         os.makedirs(Config.DOWNLOAD_LOCATION)
