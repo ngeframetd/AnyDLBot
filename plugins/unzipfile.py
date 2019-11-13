@@ -38,7 +38,7 @@ if not os.path.isdir(extracted):
 async def unzip(bot, update):
     if bot.fwd_from:
         return
-    mone = await bot.edit("Processing ...")
+    mone = await bot.edit_message_text("Processing ...")
     if update.from_user.id not in Config.AUTH_USERS:
         
         await bot.delete_messages(
