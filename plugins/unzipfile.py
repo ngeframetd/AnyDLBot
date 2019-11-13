@@ -12,8 +12,9 @@ import time
 import zipfile
 from datetime import datetime
 from zipfile import ZipFile
-
-import pyrogram
+from bot import app
+from pyrogram import *
+from pyrogram import client
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from helper_funcs.chat_base import TRChatBase
@@ -45,16 +46,16 @@ if not os.path.isdir(extracted):
 
 
 @pyrogram.Client.on_message(pyrogram.Filters.command(["zipcikar"]))
-async def unzip(bot, update):
+async def unzip(bot, update,client):
     
-    mone = await bot.send_message(
+    mone = await bot.send_message.(
             chat_id=update.chat.id,
             text="trying to download",
             reply_to_message_id=update.message_id
         )
     if not os.path.isdir(Config.DOWNLOAD_LOCATION):
         os.makedirs(Config.DOWNLOAD_LOCATION)
-    if update.reply_to_message_id:
+    if app.send_message.chat_id:
         start = datetime.now()
         reply_message = await bot.get_reply_message()
         try:
