@@ -40,7 +40,7 @@ async def _(event):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
         start = datetime.now()
-        reply_message = await await bot.send_message(reply_to_message_id=update.message_id)
+        reply_message = await bot.send_message(reply_to_message_id=update.message_id)
         try:
             c_time = time.time()
             downloaded_file_name = await bot.download_media(
