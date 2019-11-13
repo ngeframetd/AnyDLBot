@@ -46,7 +46,7 @@ if not os.path.isdir(extracted):
 
 
 @pyrogram.Client.on_message(pyrogram.Filters.command(["zipcikar"]))
-async def unzip(bot, update,client):
+async def unzip(bot, update):
     
     mone = await bot.edit_message_text(
             chat_id=update.chat.id,
@@ -55,84 +55,84 @@ async def unzip(bot, update,client):
         )
     if not os.path.isdir(Config.DOWNLOAD_LOCATION):
         os.makedirs(Config.DOWNLOAD_LOCATION)
-    if client.send_message.chat_id:
-        start = datetime.now()
-        reply_message = await bot.get_reply_message()
-        try:
-            c_time = time.time()
-            downloaded_file_name = await borg.download_media(
-                reply_message,
-                Config.DOWNLOAD_LOCATION,
-                progress_callback=lambda d, t: asyncio.get_bot_loop().create_task(
-                    progress(d, t, mone, c_time, "trying to download")
-                )
+    # if client.send_message.chat_id:
+    start = datetime.now()
+    reply_message = await bot.get_reply_message()
+    try:
+        c_time = time.time()
+        downloaded_file_name = await borg.download_media(
+            reply_message,
+            Config.DOWNLOAD_LOCATION,
+            progress_callback=lambda d, t: asyncio.get_bot_loop().create_task(
+                progress(d, t, mone, c_time, "trying to download")
             )
-        except Exception as e:  # pylint:disable=C0103,W0703
-            await mone.edit(str(e))
-        else:
-            end = datetime.now()
-            ms = (end - start).seconds
-            await mone.edit("Stored the zip to `{}` in {} seconds.".format(downloaded_file_name, ms))
+        )
+    except Exception as e:  # pylint:disable=C0103,W0703
+        await mone.edit(str(e))
+    else:
+        end = datetime.now()
+        ms = (end - start).seconds
+        await mone.edit("Stored the zip to `{}` in {} seconds.".format(downloaded_file_name, ms))
 
-        with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
-            zip_ref.extractall(extracted)
-        filename = sorted(get_lst_of_files(extracted, []))
+    with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
+        zip_ref.extractall(extracted)
+    filename = sorted(get_lst_of_files(extracted, []))
         #filename = filename + "/"
-        await bot.edit_message_text("Unzipping now")
+    await bot.edit_message_text("Unzipping now")
         # r=root, d=directories, f = files
-        for single_file in filename:
-            if os.path.exists(single_file):
+    for single_file in filename:
+        if os.path.exists(single_file):
                 # https://stackoverflow.com/a/678242/4723940
-                caption_rts = os.path.basename(single_file)
-                force_document = True
-                supports_streaming = False
-                document_attributes = []
-                if single_file.endswith((".mp4", ".mp3", ".flac", ".webm")):
-                    metadata = extractMetadata(createParser(single_file))
-                    duration = 0
-                    width = 0
-                    height = 0
-                    if metadata.has("duration"):
-                        duration = metadata.get('duration').seconds
-                    if os.path.exists(thumb_image_path):
-                        metadata = extractMetadata(createParser(thumb_image_path))
-                        if metadata.has("width"):
-                            width = metadata.get("width")
-                        if metadata.has("height"):
-                            height = metadata.get("height")
-                    document_attributes = [
-                        DocumentAttributeVideo(
-                            duration=duration,
-                            w=width,
-                            h=height,
-                            round_message=False,
-                            supports_streaming=True
-                        )
-                    ]
-                try:
-                    await bot.send_file(
-                        bot.chat_id,
-                        single_file,
-                        caption=f"UnZipped `{caption_rts}`",
-                        force_document=force_document,
-                        supports_streaming=supports_streaming,
-                        allow_cache=False,
-                        reply_to=bot.message.id,
-                        attributes=document_attributes,
+            caption_rts = os.path.basename(single_file)
+            force_document = True
+            supports_streaming = False
+            document_attributes = []
+            if single_file.endswith((".mp4", ".mp3", ".flac", ".webm")):
+                metadata = extractMetadata(createParser(single_file))
+                duration = 0
+                width = 0
+                height = 0
+                if metadata.has("duration"):
+                    duration = metadata.get('duration').seconds
+                if os.path.exists(thumb_image_path):
+                    metadata = extractMetadata(createParser(thumb_image_path))
+                    if metadata.has("width"):
+                        width = metadata.get("width")
+                    if metadata.has("height"):
+                        height = metadata.get("height")
+                document_attributes = [
+                    DocumentAttributeVideo(
+                        duration=duration,
+                        w=width,
+                        h=height,
+                        round_message=False,
+                        supports_streaming=True
+                    )
+                ]
+            try:
+                await bot.send_file(
+                    bot.chat_id,
+                    single_file,
+                    caption=f"UnZipped `{caption_rts}`",
+                    force_document=force_document,
+                    supports_streaming=supports_streaming,
+                    allow_cache=False,
+                    reply_to=bot.message.id,
+                    attributes=document_attributes,
                         # progress_callback=lambda d, t: asyncio.get_bot_loop().create_task(
                         #     progress(d, t, bot, c_time, "trying to upload")
                         # )
-                    )
-                except Exception as e:
-                    await bot.send_message(
-                        bot.chat_id,
-                        "{} caused `{}`".format(caption_rts, str(e)),
-                        reply_to=bot.message.id
-                    )
+                )
+            except Exception as e:
+                await bot.send_message(
+                    bot.chat_id,
+                    "{} caused `{}`".format(caption_rts, str(e)),
+                    reply_to=bot.message.id
+                )
                     # some media were having some issues
-                    continue
-                os.remove(single_file)
-        os.remove(downloaded_file_name)
+                continue
+            os.remove(single_file)
+    os.remove(downloaded_file_name)
 
 
 
