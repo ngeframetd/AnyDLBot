@@ -90,7 +90,7 @@ async def unzip(bot, update):
                     "unzip",
                     "-o",
                     extract_dir_path,
-                    "-d"
+                    "-d",
                     saved_file_path
                 ]
                 # https://stackoverflow.com/a/39629367/4723940
