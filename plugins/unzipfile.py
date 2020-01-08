@@ -38,8 +38,8 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
 
-extracted = Config.TMP_DOWNLOAD_DIRECTORY + "extracted/"
-thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
+extracted = Config.DOWNLOAD_LOCATION + "extracted/"
+thumb_image_path = Config.DOWNLOAD_LOCATION + "/thumb_image.jpg"
 if not os.path.isdir(extracted):
     os.makedirs(extracted)
 
@@ -49,8 +49,8 @@ async def unzip(bot, update):
     if update.fwd_from:
         return
     mone = await update.edit("Processing ...")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    if not os.path.isdir(Config.DOWNLOAD_LOCATION):
+        os.makedirs(Config.DOWNLOAD_LOCATION)
     if update.reply_to_msg_id:
         start = datetime.now()
         reply_message = await update.get_reply_message()
@@ -58,7 +58,7 @@ async def unzip(bot, update):
             c_time = time.time()
             downloaded_file_name = await borg.download_media(
                 reply_message,
-                Config.TMP_DOWNLOAD_DIRECTORY,
+                Config.DOWNLOAD_LOCATION,
                 progress_callback=lambda d, t: asyncio.get_update_loop().create_task(
                     progress(d, t, mone, c_time, "trying to download")
                 )
