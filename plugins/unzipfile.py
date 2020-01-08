@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 import os
 import shutil
 import subprocess
-from zipfile import ZipFile
 import time
 from helper_funcs.display_progress import humanbytes, progress_for_pyrogram
 # the secret configuration specific things
@@ -87,68 +86,78 @@ async def unzip(bot, update):
                 message_id=a.message_id
             )
             try:
-                with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
-                    zip_ref.extractall(extracted)
-                filename = sorted(get_lst_of_files(extracted, []))
+                command_to_exec = [
+                    "unzip",
+                    "-o",
+                    saved_file_path,
+                    # extract_dir_path,
+                    "-d",
+                    extract_dir_path
+                ]
+                filename = sorted(get_lst_of_files(extract_dir_path, []))
                 # https://stackoverflow.com/a/39629367/4723940
-                logger.info(command_to_exec)
-                t_response = subprocess.check_output(
-                    command_to_exec, stderr=subprocess.STDOUT)
-                # https://stackoverflow.com/a/26178369/4723940
-            except:
-                try:
-                    os.remove(saved_file_path)
-                    shutil.rmtree(extract_dir_path)
-                except:
-                    pass
-                await bot.edit_message_text(
-                    chat_id=update.chat.id,
-                    text=Translation.EXTRACT_ZIP_ERRS_OCCURED,
-                    disable_web_page_preview=True,
-                    parse_mode="html",
-                    message_id=a.message_id
-                )
-            else:
-                os.remove(saved_file_path)
-                inline_keyboard = []
-                zip_file_contents = os.listdir(extract_dir_path)
-                i = 0
-                for current_file in zip_file_contents:
-                    cb_string = "ZIP:{}:ZIP".format(str(i))
-                    inline_keyboard.append([
-                        pyrogram.InlineKeyboardButton(
-                            current_file,
-                            callback_data=cb_string.encode("UTF-8")
-                        )
-                    ])
-                    i = i + 1
-                cb_string = "ZIP:{}:ZIP".format("ALL")
-                inline_keyboard.append([
-                    pyrogram.InlineKeyboardButton(
-                        "Upload All Files",
-                        callback_data=cb_string.encode("UTF-8")
-                    )
-                ])
-                cb_string = "ZIP:{}:ZIP".format("NONE")
-                inline_keyboard.append([
-                    pyrogram.InlineKeyboardButton(
-                        "Cancel",
-                        callback_data=cb_string.encode("UTF-8")
-                    )
-                ])
-                reply_markup = pyrogram.InlineKeyboardMarkup(inline_keyboard)
-                await bot.edit_message_text(
-                    chat_id=update.chat.id,
-                    text=Translation.EXTRACT_ZIP_STEP_TWO,
-                    message_id=a.message_id,
-                    reply_markup=reply_markup,
-                )
-    else:
-        await bot.send_message(
-            chat_id=update.chat.id,
-            text=Translation.EXTRACT_ZIP_INTRO_ONE,
-            reply_to_message_id=update.message_id
-        )
+                await event.edit("Unzipping now")
+                # r=root, d=directories, f = files
+                for single_file in filename:
+                    if os.path.exists(single_file):
+                # https://stackoverflow.com/a/678242/4723940
+                        caption_rts = os.path.basename(single_file)
+                        force_document = False
+                        supports_streaming = True
+                        document_attributes = []
+                        if single_file.endswith((".mp4", ".mp3", ".flac", ".webm")):
+                            metadata = extractMetadata(createParser(single_file))
+                            duration = 0
+                            width = 0
+                            height = 0
+                            if metadata.has("duration"):
+                                duration = metadata.get('duration').seconds
+                            if os.path.exists(thumb_image_path):
+                                metadata = extractMetadata(createParser(thumb_image_path))
+                                if metadata.has("width"):
+                                    width = metadata.get("width")
+                                if metadata.has("height"):
+                                    height = metadata.get("height")
+                            document_attributes = [
+                                DocumentAttributeVideo(
+                                    duration=duration,
+                                    w=width,
+                                    h=height,
+                                    round_message=False,
+                                    supports_streaming=True
+                                )
+                            ]
+                        try:
+                            await borg.send_file(
+                                event.chat_id,
+                                single_file,
+                                caption=f"UnZipped `{caption_rts}`",
+                                force_document=force_document,
+                                supports_streaming=supports_streaming,
+                                allow_cache=False,
+                                reply_to=event.message.id,
+                                attributes=document_attributes,
+                                # progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                                #     progress(d, t, event, c_time, "trying to upload")
+                                # )
+                            )
+                        except Exception as e:
+                            await borg.send_message(
+                                event.chat_id,
+                                "{} caused `{}`".format(caption_rts, str(e)),
+                                reply_to=event.message.id
+                            )
+                            # some media were having some issues
+                            continue
+                        os.remove(single_file)
+                os.remove(downloaded_file_name)
+
+
+
+
+
+
+
 
 def get_lst_of_files(input_directory, output_lst):
     filesinfolder = os.listdir(input_directory)
