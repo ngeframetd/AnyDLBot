@@ -154,11 +154,6 @@ async def unzip(bot, update):
 
 
 
-
-
-
-
-
 def get_lst_of_files(input_directory, output_lst):
     filesinfolder = os.listdir(input_directory)
     for file_name in filesinfolder:
