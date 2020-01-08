@@ -78,7 +78,7 @@ async def button(bot, update):
             return False
         zip_file_contents = os.listdir(extract_dir_path)
         type_of_extract, index_extractor = cb_data.split(":")
-        if index_extractor == "NONE":
+        if index_extractor == ":":
             try:
                 shutil.rmtree(extract_dir_path)
             except:
