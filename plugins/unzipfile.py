@@ -128,24 +128,24 @@ async def unzip(bot, update):
                                 )
                             ]
                         try:
-                            await borg.send_file(
-                                event.chat_id,
+                            await bot.send_file(
+                                update.chat_id,
                                 single_file,
                                 caption=f"UnZipped `{caption_rts}`",
                                 force_document=force_document,
                                 supports_streaming=supports_streaming,
                                 allow_cache=False,
-                                reply_to=event.message.id,
+                                reply_to=update.message.id,
                                 attributes=document_attributes,
                                 # progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                                 #     progress(d, t, event, c_time, "trying to upload")
                                 # )
                             )
                         except Exception as e:
-                            await borg.send_message(
-                                event.chat_id,
+                            await bot.send_message(
+                                update.chat_id,
                                 "{} caused `{}`".format(caption_rts, str(e)),
-                                reply_to=event.message.id
+                                reply_to=update.message.id
                             )
                             # some media were having some issues
                             continue
