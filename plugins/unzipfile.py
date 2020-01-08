@@ -23,7 +23,7 @@ from pySmartDL import SmartDL
 
 # the Strings used for this "thing"
 from translation import Translation
-from uniborg.util import admin_cmd, humanbytes, progress, time_formatter
+
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
