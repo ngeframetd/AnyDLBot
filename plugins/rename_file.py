@@ -44,6 +44,14 @@ async def rename_doc(bot, update):
     TRChatBase(update.from_user.id, update.text, "rename")
     if (" " in update.text) and (update.reply_to_message is not None):
         cmd, file_name = update.text.split(" ", 1)
+        if len(file_name) > 64:
+            await update.reply_text(
+                Translation.IFLONG_FILE_NAME.format(
+                    alimit="64",
+                    num=len(file_name)
+                )
+            )
+            return
         description = Translation.CUSTOM_CAPTION_UL_FILE
         download_location = Config.DOWNLOAD_LOCATION + "/"
         a = await bot.send_message(
@@ -63,11 +71,14 @@ async def rename_doc(bot, update):
             )
         )
         if the_real_download_location is not None:
-            await bot.edit_message_text(
-                text=Translation.SAVED_RECVD_DOC_FILE,
-                chat_id=update.chat.id,
-                message_id=a.message_id
-            )
+            try:
+                await bot.edit_message_text(
+                    text=Translation.SAVED_RECVD_DOC_FILE,
+                    chat_id=update.chat.id,
+                    message_id=a.message_id
+                )
+            except:
+                pass
             if "IndianMovie" in the_real_download_location:
                 await bot.edit_message_text(
                     text=Translation.RENAME_403_ERR,
@@ -77,11 +88,11 @@ async def rename_doc(bot, update):
                 return
             new_file_name = download_location + file_name
             os.rename(the_real_download_location, new_file_name)
-            await bot.edit_message_text(
-                text=Translation.UPLOAD_START,
-                chat_id=update.chat.id,
-                message_id=a.message_id
-            )
+            # await bot.edit_message_text(
+            #     text=Translation.UPLOAD_START,
+            #     chat_id=update.chat.id,
+            #     message_id=a.message_id
+            # )
             logger.info(the_real_download_location)
             thumb_image_path = Config.DOWNLOAD_LOCATION + "/" + str(update.from_user.id) + ".jpg"
             if not os.path.exists(thumb_image_path):

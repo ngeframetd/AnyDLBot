@@ -2,6 +2,24 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K
 
+from plugins.dl_button import ddl_call_back
+from plugins.youtube_dl_button import youtube_dl_call_back
+from helper_funcs.display_progress import progress_for_pyrogram, humanbytes
+from translation import Translation
+from helper_funcs.display_progress import humanbytes, progress_for_pyrogram
+from helper_funcs.chat_base import TRChatBase
+from pydrive.drive import GoogleDrive
+from PIL import Image
+from hachoir.parser import createParser
+from hachoir.metadata import extractMetadata
+import requests
+import pyrogram
+from datetime import datetime
+import time
+import subprocess
+import shutil
+import os
+import math
 import json
 # the logging things
 import logging
@@ -9,26 +27,10 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-import json
-import math
-import os
-import shutil
-import subprocess
-import time
-from datetime import datetime
 
-import pyrogram
-import requests
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
 # https://stackoverflow.com/a/37631799/4723940
-from PIL import Image
-from pydrive.drive import GoogleDrive
 
-from helper_funcs.chat_base import TRChatBase
-from helper_funcs.display_progress import humanbytes, progress_for_pyrogram
 # the Strings used for this "thing"
-from translation import Translation
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -44,14 +46,7 @@ else:
 
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
-from helper_funcs.chat_base import TRChatBase
-from helper_funcs.display_progress import progress_for_pyrogram, humanbytes
-from plugins.youtube_dl_button import youtube_dl_call_back
-from plugins.dl_button import ddl_call_back
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
 # https://stackoverflow.com/a/37631799/4723940
-from PIL import Image
 
 
 @pyrogram.Client.on_callback_query()
@@ -77,7 +72,7 @@ async def button(bot, update):
             )
             return False
         zip_file_contents = os.listdir(extract_dir_path)
-        type_of_extract  = cb_data.split(":")
+        type_of_extract = cb_data.split(":")
         index_extractor = cb_data.split(":")
         if index_extractor == "NONE":
             try:
@@ -92,7 +87,8 @@ async def button(bot, update):
         elif index_extractor == "ALL":
             i = 0
             for file_content in zip_file_contents:
-                current_file_name = os.path.join(extract_dir_path, file_content)
+                current_file_name = os.path.join(
+                    extract_dir_path, file_content)
                 start_time = time.time()
                 await bot.send_document(
                     chat_id=update.message.chat.id,
