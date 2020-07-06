@@ -3,38 +3,33 @@
 # (c) Shrimadhav U K
 
 # the logging things
-import logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
+from pyrogram import(
+    Client,
+    Filters
+)
+from translation import Translation
 import os
-import sqlite3
+import logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+LOGGER = logging.getLogger(__name__)
 
-# the secret configuration specific things
-if bool(os.environ.get("WEBHOOK", False)):
-    from sample_config import Config
-else:
-    from sample_config import Config
 
 # the Strings used for this "thing"
-from translation import Translation
 
-import pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
-from helper_funcs.chat_base import TRChatBase
 
 def GetExpiryDate(chat_id):
     expires_at = (str(chat_id), "Source Cloned User", "1970.01.01.12.00.00")
-    Config.AUTH_USERS.add(7351948)
     return expires_at
 
 
-@pyrogram.Client.on_message(pyrogram.Filters.command(["help", "about"]))
+@Client.on_message(Filters.command(["help", "about"]))
 async def help_user(bot, update):
-    # logger.info(update)
-    TRChatBase(update.from_user.id, update.text, "/help")
+    # LOGGER.info(update)
     await bot.send_message(
         chat_id=update.chat.id,
         text=Translation.HELP_USER,
@@ -44,25 +39,24 @@ async def help_user(bot, update):
     )
 
 
-@pyrogram.Client.on_message(pyrogram.Filters.command(["me"]))
+@Client.on_message(Filters.command(["me"]))
 async def get_me_info(bot, update):
-    # logger.info(update)
-    TRChatBase(update.from_user.id, update.text, "/me")
+    # LOGGER.info(update)
     chat_id = str(update.from_user.id)
     chat_id, plan_type, expires_at = GetExpiryDate(chat_id)
     await bot.send_message(
         chat_id=update.chat.id,
-        text=Translation.CURENT_PLAN_DETAILS.format(chat_id, plan_type, expires_at),
+        text=Translation.CURENT_PLAN_DETAILS.format(
+            chat_id, plan_type, expires_at),
         parse_mode="html",
         disable_web_page_preview=True,
         reply_to_message_id=update.message_id
     )
 
 
-@pyrogram.Client.on_message(pyrogram.Filters.command(["start"]))
+@Client.on_message(Filters.command(["start"]))
 async def start(bot, update):
-    # logger.info(update)
-    TRChatBase(update.from_user.id, update.text, "/start")
+    # LOGGER.info(update)
     await bot.send_message(
         chat_id=update.chat.id,
         text=Translation.START_TEXT,
@@ -70,10 +64,9 @@ async def start(bot, update):
     )
 
 
-@pyrogram.Client.on_message(pyrogram.Filters.command(["upgrade"]))
+@Client.on_message(Filters.command(["upgrade"]))
 async def upgrade(bot, update):
-    # logger.info(update)
-    TRChatBase(update.from_user.id, update.text, "/upgrade")
+    # LOGGER.info(update)
     await bot.send_message(
         chat_id=update.chat.id,
         text=Translation.UPGRADE_TEXT,

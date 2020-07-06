@@ -3,23 +3,23 @@
 # (c) Shrimadhav U K
 
 # the logging things
-import logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-import math
-import os
+from translation import Translation
+from anydlbot import(
+    FINISHED_PROGRESS_STR,
+    UN_FINISHED_PROGRESS_STR
+)
 import time
+import os
+import math
+import logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+LOGGER = logging.getLogger(__name__)
 
-# the secret configuration specific things
-if bool(os.environ.get("WEBHOOK", False)):
-    from sample_config import Config
-else:
-    from sample_config import Config
 
 # the Strings used for this "thing"
-from translation import Translation
 
 
 async def progress_for_pyrogram(
@@ -43,8 +43,10 @@ async def progress_for_pyrogram(
         estimated_total_time = TimeFormatter(milliseconds=estimated_total_time)
 
         progress = "[{0}{1}] \nP: {2}%\n".format(
-            ''.join(["█" for i in range(math.floor(percentage / 5))]),
-            ''.join(["░" for i in range(20 - math.floor(percentage / 5))]),
+            ''.join([FINISHED_PROGRESS_STR for i in range(
+                math.floor(percentage / 5))]),
+            ''.join([UN_FINISHED_PROGRESS_STR for i in range(
+                20 - math.floor(percentage / 5))]),
             round(percentage, 2))
 
         tmp = progress + "{0} of {1}\nSpeed: {2}/s\nETA: {3}\n".format(
@@ -56,7 +58,7 @@ async def progress_for_pyrogram(
         )
         try:
             await message.edit(
-                text="{}\n {}".format(
+                "{}\n {}".format(
                     ud_type,
                     tmp
                 )

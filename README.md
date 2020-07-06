@@ -2,6 +2,7 @@
 ---
 
 An Open Source ALL-In-One Telegram RoBot, that can do lot of things.
+👉 check the 'branches' for all the features..!
 
 ## Credits, and Thanks to
 
@@ -21,7 +22,7 @@ virtualenv -p python3 VENV
 . ./VENV/bin/activate
 pip install -r requirements.txt
 # <Create config.py with variables as given below>
-python bot.py
+python3 -m anydlbot
 ```
 
 An example `config.py` file could be:
@@ -29,15 +30,14 @@ An example `config.py` file could be:
 **Not All of the variables are mandatory**
 
 ```python3
-from sample_config import Config
+from anydlbot.sample_config import Config
 
 class Development(Config):
   APP_ID = 6
   API_HASH = "eb06d4abfb49dc3eeb1aeb98ae0f581e"
   TG_BOT_TOKEN = ""
   AUTH_USERS = [
-      "7351948"
-      # is a string for LEGACY purposes
+    7351948
   ]
 ```
 

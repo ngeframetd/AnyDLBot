@@ -13,8 +13,10 @@ class Config(object):
     DOWNLOAD_LOCATION = "./DOWNLOADS"
     # Telegram maximum file upload size
     MAX_FILE_SIZE = 50000000
-    TG_MAX_FILE_SIZE = 1572864000
+    TG_MAX_FILE_SIZE = 2097152000
     FREE_USER_MAX_FILE_SIZE = 50000000
+    CHUNK_SIZE = 128
+    PROCESS_MAX_TIMEOUT = 3600
     # default thumbnail to be used in the videos
     DEF_THUMB_NAIL_VID_S = os.environ.get("DEF_THUMB_NAIL_VID_S", "https://placehold.it/90x90")
     # proxy for accessing youtube-dl in GeoRestricted Areas
