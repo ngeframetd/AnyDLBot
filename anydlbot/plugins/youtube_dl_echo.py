@@ -2,28 +2,23 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K
 
+import asyncio
+import json
+import logging
+import math
+import os
+import time
+
+from pyrogram import (Client, Filters, InlineKeyboardButton,
+                      InlineKeyboardMarkup)
+
+from anydlbot import (AUTH_USERS, DEF_THUMB_NAIL_VID_S, DOWNLOAD_LOCATION,
+                      HTTP_PROXY)
+from anydlbot.helper_funcs.display_progress import humanbytes
 # the logging things
 from anydlbot.helper_funcs.help_uploadbot import DownLoadFile
-from anydlbot.helper_funcs.display_progress import humanbytes
-from pyrogram import(
-    Client,
-    Filters,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup
-)
 from translation import Translation
-from anydlbot import(
-    AUTH_USERS,
-    HTTP_PROXY,
-    DOWNLOAD_LOCATION,
-    DEF_THUMB_NAIL_VID_S
-)
-import time
-import os
-import math
-import json
-import asyncio
-import logging
+
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"

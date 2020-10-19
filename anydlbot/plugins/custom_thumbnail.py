@@ -4,6 +4,7 @@
 
 # the logging things
 import logging
+
 logging.basicConfig(
     level=logging.DEBUG, 
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -11,21 +12,15 @@ logging.basicConfig(
 LOGGER = logging.getLogger(__name__)
 
 import os
-from PIL import Image
 import time
 
-from anydlbot import(
-        AUTH_USERS,
-        DOWNLOAD_LOCATION
-)
+from PIL import Image
+from pyrogram import Client, Filters
 
+from anydlbot import AUTH_USERS, DOWNLOAD_LOCATION
 # the Strings used for this "thing"
 from translation import Translation
 
-from pyrogram import(
-        Client,
-        Filters
-)
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 

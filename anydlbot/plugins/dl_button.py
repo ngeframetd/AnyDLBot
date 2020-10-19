@@ -4,6 +4,7 @@
 
 # the logging things
 import logging
+
 logging.basicConfig(
     level=logging.DEBUG, 
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -11,7 +12,6 @@ logging.basicConfig(
 LOGGER = logging.getLogger(__name__)
 
 import asyncio
-import aiohttp
 import json
 import math
 import os
@@ -19,24 +19,23 @@ import shutil
 import time
 from datetime import datetime
 
-from anydlbot import(
-        DOWNLOAD_LOCATION,
-        TG_MAX_FILE_SIZE,
-        PROCESS_MAX_TIMEOUT,
-        CHUNK_SIZE
-)
+import aiohttp
+import pyrogram
 
+from anydlbot import (CHUNK_SIZE, DOWNLOAD_LOCATION, PROCESS_MAX_TIMEOUT,
+                      TG_MAX_FILE_SIZE)
 # the Strings used for this "thing"
 from translation import Translation
 
-import pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
-from anydlbot.helper_funcs.display_progress import progress_for_pyrogram, humanbytes, TimeFormatter
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 # https://stackoverflow.com/a/37631799/4723940
 from PIL import Image
+
+from anydlbot.helper_funcs.display_progress import (TimeFormatter, humanbytes,
+                                                    progress_for_pyrogram)
 
 
 async def ddl_call_back(bot, update):

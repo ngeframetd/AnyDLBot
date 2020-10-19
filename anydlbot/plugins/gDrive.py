@@ -4,12 +4,13 @@
 
 # the logging things
 import logging
+
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-from datetime import datetime
 import os
+from datetime import datetime
 
 # the secret configuration specific things
 if bool(os.environ.get("WEBHOOK", False)):
@@ -18,15 +19,14 @@ else:
     from sample_config import Config
 
 # the Strings used for this "thing"
+import pyrogram
+
 from translation import Translation
 
-import pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 from helper_funcs.chat_base import TRChatBase
 from helper_funcs.display_progress import humanbytes
-
-
 from pydrive.auth import GoogleAuth
 
 

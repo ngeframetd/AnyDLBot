@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K
 
-# the logging things
-from pyrogram import(
-    Client,
-    Filters
-)
-from translation import Translation
-import os
 import logging
+import os
+
+# the logging things
+from pyrogram import Client, Filters
+
+from translation import Translation
+
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"

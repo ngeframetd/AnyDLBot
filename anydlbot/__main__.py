@@ -4,6 +4,7 @@
 
 # the logging things
 import logging
+
 logging.basicConfig(
     level=logging.DEBUG, 
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -11,14 +12,11 @@ logging.basicConfig(
 LOGGER = logging.getLogger(__name__)
 
 import os
-from anydlbot import(
-        APP_ID,
-        API_HASH,
-        TG_BOT_TOKEN,
-        DOWNLOAD_LOCATION
-)
 
 from pyrogram import Client
+
+from anydlbot import API_HASH, APP_ID, DOWNLOAD_LOCATION, TG_BOT_TOKEN
+
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 

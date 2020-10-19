@@ -2,16 +2,15 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K
 
+import logging
+import math
+import os
+import time
+
+from anydlbot import FINISHED_PROGRESS_STR, UN_FINISHED_PROGRESS_STR
 # the logging things
 from translation import Translation
-from anydlbot import(
-    FINISHED_PROGRESS_STR,
-    UN_FINISHED_PROGRESS_STR
-)
-import time
-import os
-import math
-import logging
+
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"

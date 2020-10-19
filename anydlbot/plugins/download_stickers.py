@@ -2,20 +2,17 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K
 
+import logging
+import os
+import time
+
+from pyrogram import Client, Filters
+
+from anydlbot import AUTH_USERS, DOWNLOAD_LOCATION
 # the logging things
 from anydlbot.helper_funcs.display_progress import progress_for_pyrogram
-from pyrogram import(
-    Client,
-    Filters
-)
 from translation import Translation
-from anydlbot import(
-    AUTH_USERS,
-    DOWNLOAD_LOCATION
-)
-import time
-import os
-import logging
+
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"

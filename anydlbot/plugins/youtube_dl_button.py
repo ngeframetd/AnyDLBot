@@ -4,6 +4,7 @@
 
 # the logging things
 import logging
+
 logging.basicConfig(
     level=logging.DEBUG, 
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -18,23 +19,21 @@ import shutil
 import time
 from datetime import datetime
 
-from anydlbot import(
-        DOWNLOAD_LOCATION,
-        TG_MAX_FILE_SIZE,
-        HTTP_PROXY
-)
+from pyrogram import InputMediaPhoto
 
+from anydlbot import DOWNLOAD_LOCATION, HTTP_PROXY, TG_MAX_FILE_SIZE
 # the Strings used for this "thing"
 from translation import Translation
 
-from pyrogram import InputMediaPhoto
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
-from anydlbot.helper_funcs.display_progress import progress_for_pyrogram, humanbytes
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 # https://stackoverflow.com/a/37631799/4723940
 from PIL import Image
+
+from anydlbot.helper_funcs.display_progress import (humanbytes,
+                                                    progress_for_pyrogram)
 from anydlbot.helper_funcs.help_Nekmo_ffmpeg import generate_screen_shots
 
 

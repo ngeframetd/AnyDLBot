@@ -4,6 +4,7 @@
 
 # the logging things
 import logging
+
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -12,7 +13,9 @@ import os
 import shutil
 import subprocess
 import time
+
 from helper_funcs.display_progress import humanbytes, progress_for_pyrogram
+
 # the secret configuration specific things
 if bool(os.environ.get("WEBHOOK", False)):
     from sample_config import Config
@@ -20,13 +23,14 @@ else:
     from sample_config import Config
 
 # the Strings used for this "thing"
+import pyrogram
+
 from translation import Translation
 
-import pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 from helper_funcs.chat_base import TRChatBase
-from helper_funcs.display_progress import progress_for_pyrogram, humanbytes
+from helper_funcs.display_progress import humanbytes, progress_for_pyrogram
 
 
 @pyrogram.Client.on_message(pyrogram.Filters.command(["unzip"]))
