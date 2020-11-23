@@ -75,7 +75,6 @@ async def ddl_call_back(bot, update):
                 o = entity.offset
                 l = entity.length
                 youtube_dl_url = youtube_dl_url[o:o + l]
-    description = Translation.CUSTOM_CAPTION_UL_FILE
     start = datetime.now()
     await bot.edit_message_text(
         text=Translation.DOWNLOAD_START,
@@ -134,9 +133,8 @@ async def ddl_call_back(bot, update):
             duration = 0
             if tg_send_type != "file":
                 metadata = extractMetadata(createParser(download_directory))
-                if metadata is not None:
-                    if metadata.has("duration"):
-                        duration = metadata.get('duration').seconds
+                if metadata is not None and metadata.has("duration"):
+                    duration = metadata.get('duration').seconds
             # get the correct width, height, and duration for videos greater than 10MB
             if os.path.exists(thumb_image_path):
                 width = 0
@@ -165,6 +163,7 @@ async def ddl_call_back(bot, update):
             else:
                 thumb_image_path = None
             start_time = time.time()
+            description = Translation.CUSTOM_CAPTION_UL_FILE
             # try to upload file
             if tg_send_type == "audio":
                 await bot.send_audio(
@@ -259,7 +258,6 @@ async def ddl_call_back(bot, update):
 
 
 async def download_coroutine(bot, session, url, file_name, chat_id, message_id, start):
-    downloaded = 0
     display_message = ""
     async with session.get(url, timeout=PROCESS_MAX_TIMEOUT) as response:
         total_length = int(response.headers["Content-Length"])
@@ -274,6 +272,7 @@ URL: {}
 File Size: {}""".format(url, humanbytes(total_length))
         )
         with open(file_name, "wb") as f_handle:
+            downloaded = 0
             while True:
                 chunk = await response.content.read(CHUNK_SIZE)
                 if not chunk:
@@ -290,26 +289,25 @@ File Size: {}""".format(url, humanbytes(total_length))
                         (total_length - downloaded) / speed) * 1000
                     estimated_total_time = elapsed_time + time_to_completion
                     try:
-                        current_message = """**Download Status**
+                                                current_message = """**Download Status**
 URL: {}
 File Size: {}
 Downloaded: {}
 ETA: {}
 
 ©️ @AnyDLBot""".format(
-    url,
-    humanbytes(total_length),
-    humanbytes(downloaded),
-    TimeFormatter(estimated_total_time)
-)
-                        if current_message != display_message:
-                            await bot.edit_message_text(
-                                chat_id,
-                                message_id,
-                                text=current_message
-                            )
-                            display_message = current_message
+                            url,
+                            humanbytes(total_length),
+                            humanbytes(downloaded),
+                            TimeFormatter(estimated_total_time)
+                        )
+                                                if current_message != display_message:
+                                                    await bot.edit_message_text(
+                                                        chat_id,
+                                                        message_id,
+                                                        text=current_message
+                                                    )
+                                                    display_message = current_message
                     except Exception as e:
                         LOGGER.info(str(e))
-                        pass
         return await response.release()

@@ -56,7 +56,6 @@ def extract_sub_title(bot, update):
             reply_to_message_id=update.message_id
         )
         return
-    download_location = Config.DOWNLOAD_LOCATION + "/"
     if update.reply_to_message is not None:
         text = update.reply_to_message.text
         if text is not None and text.startswith("http"):
@@ -65,6 +64,7 @@ def extract_sub_title(bot, update):
                 text=Translation.UPLOAD_START,
                 reply_to_message_id=update.message_id
             )
+            download_location = Config.DOWNLOAD_LOCATION + "/"
             sub_title_file_name = extractsubtitle(text, download_location)
             bot.send_document(
                 chat_id=update.chat.id,

@@ -186,7 +186,7 @@ async def youtube_dl_call_back(bot, update):
                 download_directory_c
             )
             file_size = os.stat(current_file_name).st_size
-        
+
             if file_size > TG_MAX_FILE_SIZE:
                 await update.message.edit_caption(
                     caption=Translation.RCHD_TG_API_LIMIT.format(
@@ -215,14 +215,13 @@ async def youtube_dl_call_back(bot, update):
                 duration = 0
                 if tg_send_type != "file":
                     metadata = extractMetadata(createParser(current_file_name))
-                    if metadata is not None:
-                        if metadata.has("duration"):
-                            duration = metadata.get('duration').seconds
+                    if metadata is not None and metadata.has("duration"):
+                        duration = metadata.get('duration').seconds
                 # get the correct width, height, and duration for videos greater than 10MB
                 if os.path.exists(thumb_image_path):
                     width = 0
                     height = 90
-                    
+
                     # resize image
                     # ref: https://t.me/PyrogramChat/44663
                     # https://stackoverflow.com/a/21669827/4723940
@@ -237,7 +236,7 @@ async def youtube_dl_call_back(bot, update):
                         img.resize((90, height))
                     img.save(thumb_image_path, "JPEG")
                     # https://pillow.readthedocs.io/en/3.1.x/reference/Image.html#create-thumbnails
-                    
+
                     metadata = extractMetadata(createParser(thumb_image_path))
                     if metadata.has("width"):
                         width = metadata.get("width")
@@ -346,7 +345,7 @@ async def youtube_dl_call_back(bot, update):
                                         media=image
                                     )
                                 )
-                            i = i + 1
+                            i += 1
                 await bot.send_media_group(
                     chat_id=update.message.chat.id,
                     disable_notification=True,
