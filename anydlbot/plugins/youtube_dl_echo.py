@@ -9,14 +9,13 @@ import math
 import os
 import time
 
-from pyrogram import (Client, Filters, InlineKeyboardButton,
-                      InlineKeyboardMarkup)
-
 from anydlbot import (AUTH_USERS, DEF_THUMB_NAIL_VID_S, DOWNLOAD_LOCATION,
                       HTTP_PROXY)
 from anydlbot.helper_funcs.display_progress import humanbytes
 # the logging things
 from anydlbot.helper_funcs.help_uploadbot import DownLoadFile
+from pyrogram import (Client, Filters, InlineKeyboardButton,
+                      InlineKeyboardMarkup)
 from translation import Translation
 
 logging.basicConfig(

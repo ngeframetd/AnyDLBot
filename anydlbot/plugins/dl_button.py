@@ -3,39 +3,37 @@
 # (c) Shrimadhav U K
 
 # the logging things
+from PIL import Image
+from hachoir.parser import createParser
+from hachoir.metadata import extractMetadata
+from anydlbot.helper_funcs.display_progress import (TimeFormatter, humanbytes,
+                                                    progress_for_pyrogram)
+from translation import Translation
+from anydlbot import (CHUNK_SIZE, DOWNLOAD_LOCATION, PROCESS_MAX_TIMEOUT,
+                      TG_MAX_FILE_SIZE)
+import pyrogram
+import aiohttp
+from datetime import datetime
+import time
+import shutil
+import os
+import math
+import json
+import asyncio
 import logging
 
 logging.basicConfig(
-    level=logging.DEBUG, 
+    level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 LOGGER = logging.getLogger(__name__)
 
-import asyncio
-import json
-import math
-import os
-import shutil
-import time
-from datetime import datetime
 
-import aiohttp
-import pyrogram
-
-from anydlbot import (CHUNK_SIZE, DOWNLOAD_LOCATION, PROCESS_MAX_TIMEOUT,
-                      TG_MAX_FILE_SIZE)
 # the Strings used for this "thing"
-from translation import Translation
 
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
 # https://stackoverflow.com/a/37631799/4723940
-from PIL import Image
-
-from anydlbot.helper_funcs.display_progress import (TimeFormatter, humanbytes,
-                                                    progress_for_pyrogram)
 
 
 async def ddl_call_back(bot, update):
@@ -81,7 +79,8 @@ async def ddl_call_back(bot, update):
         chat_id=update.message.chat.id,
         message_id=update.message.message_id
     )
-    tmp_directory_for_each_user = DOWNLOAD_LOCATION + "/" + str(update.from_user.id)
+    tmp_directory_for_each_user = DOWNLOAD_LOCATION + \
+        "/" + str(update.from_user.id)
     if not os.path.isdir(tmp_directory_for_each_user):
         os.makedirs(tmp_directory_for_each_user)
     download_directory = tmp_directory_for_each_user + "/" + custom_file_name
@@ -116,7 +115,8 @@ async def ddl_call_back(bot, update):
         try:
             file_size = os.stat(download_directory).st_size
         except FileNotFoundError as exc:
-            download_directory = os.path.splitext(download_directory)[0] + "." + "mkv"
+            download_directory = os.path.splitext(
+                download_directory)[0] + "." + "mkv"
             # https://stackoverflow.com/a/678242/4723940
             file_size = os.stat(download_directory).st_size
         if file_size > TG_MAX_FILE_SIZE:
@@ -243,7 +243,8 @@ async def ddl_call_back(bot, update):
             time_taken_for_download = (end_one - start).seconds
             time_taken_for_upload = (end_two - end_one).seconds
             await bot.edit_message_text(
-                text=Translation.AFTER_SUCCESSFUL_UPLOAD_MSG_WITH_TS.format(time_taken_for_download, time_taken_for_upload),
+                text=Translation.AFTER_SUCCESSFUL_UPLOAD_MSG_WITH_TS.format(
+                    time_taken_for_download, time_taken_for_upload),
                 chat_id=update.message.chat.id,
                 message_id=update.message.message_id,
                 disable_web_page_preview=True
@@ -289,7 +290,7 @@ File Size: {}""".format(url, humanbytes(total_length))
                         (total_length - downloaded) / speed) * 1000
                     estimated_total_time = elapsed_time + time_to_completion
                     try:
-                                                current_message = """**Download Status**
+                        current_message = """**Download Status**
 URL: {}
 File Size: {}
 Downloaded: {}
@@ -301,13 +302,13 @@ ETA: {}
                             humanbytes(downloaded),
                             TimeFormatter(estimated_total_time)
                         )
-                                                if current_message != display_message:
-                                                    await bot.edit_message_text(
-                                                        chat_id,
-                                                        message_id,
-                                                        text=current_message
-                                                    )
-                                                    display_message = current_message
+                        if current_message != display_message:
+                            await bot.edit_message_text(
+                                chat_id,
+                                message_id,
+                                text=current_message
+                            )
+                            display_message = current_message
                     except Exception as e:
                         LOGGER.info(str(e))
         return await response.release()

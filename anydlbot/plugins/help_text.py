@@ -7,7 +7,6 @@ import os
 
 # the logging things
 from pyrogram import Client, Filters
-
 from translation import Translation
 
 logging.basicConfig(

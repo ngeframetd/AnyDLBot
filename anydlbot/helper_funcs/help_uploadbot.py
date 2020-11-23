@@ -3,18 +3,16 @@
 # (c) Shrimadhav U K
 
 # the logging things
+import requests
+import time
+import os
 import logging
 
 logging.basicConfig(
-    level=logging.DEBUG, 
+    level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 LOGGER = logging.getLogger(__name__)
-
-import os
-import time
-
-import requests
 
 
 def DetectFileSize(url):

@@ -3,21 +3,18 @@
 # (c) Shrimadhav U K
 
 # the logging things
+from hachoir.parser import createParser
+from hachoir.metadata import extractMetadata
+import time
+import os
+import asyncio
 import logging
 
 logging.basicConfig(
-    level=logging.DEBUG, 
+    level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 LOGGER = logging.getLogger(__name__)
-
-
-import asyncio
-import os
-import time
-
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
 
 
 async def place_water_mark(input_file, output_file, water_mark_file):
@@ -101,6 +98,7 @@ async def take_screen_shot(video_file, output_directory, ttl):
         return None
 
 # https://github.com/Nekmo/telegram-upload/blob/master/telegram_upload/video.py#L26
+
 
 async def cult_small_video(video_file, output_directory, start_time, end_time):
     # https://stackoverflow.com/a/13891070/4723940

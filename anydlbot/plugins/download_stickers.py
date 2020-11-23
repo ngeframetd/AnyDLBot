@@ -6,11 +6,10 @@ import logging
 import os
 import time
 
-from pyrogram import Client, Filters
-
 from anydlbot import AUTH_USERS, DOWNLOAD_LOCATION
 # the logging things
 from anydlbot.helper_funcs.display_progress import progress_for_pyrogram
+from pyrogram import Client, Filters
 from translation import Translation
 
 logging.basicConfig(

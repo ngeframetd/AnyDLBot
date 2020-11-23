@@ -2,19 +2,23 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K
 
-# the logging things
 import logging
+import os
+import shutil
+import subprocess
+import time
+from glob import glob
+
+import pyrogram
+# the logging things
+from helper_funcs.chat_base import TRChatBase
+from helper_funcs.display_progress import humanbytes, progress_for_pyrogram
+from translation import Translation
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-import os
-import shutil
-import subprocess
-import time
-
-from helper_funcs.display_progress import humanbytes, progress_for_pyrogram
 
 # the secret configuration specific things
 if bool(os.environ.get("WEBHOOK", False)):
@@ -23,14 +27,8 @@ else:
     from sample_config import Config
 
 # the Strings used for this "thing"
-import pyrogram
-
-from translation import Translation
 
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
-
-from helper_funcs.chat_base import TRChatBase
-from helper_funcs.display_progress import humanbytes, progress_for_pyrogram
 
 
 @pyrogram.Client.on_message(pyrogram.Filters.command(["unzip"]))
@@ -50,7 +48,7 @@ async def unzip(bot, update):
     reply_message = update.reply_to_message
     if ((reply_message is not None) and
         (reply_message.document is not None) and
-        (reply_message.document.file_name.endswith(Translation.UNZIP_SUPPORTED_EXTENSIONS))):
+            (reply_message.document.file_name.endswith(Translation.UNZIP_SUPPORTED_EXTENSIONS))):
         a = await bot.send_message(
             chat_id=update.chat.id,
             text=Translation.DOWNLOAD_START,
@@ -90,18 +88,22 @@ async def unzip(bot, update):
                 message_id=a.message_id
             )
             try:
-                command_to_exec = [
-                    "unzip",
-                    "-o",
-                    saved_file_path,
-                    # extract_dir_path,
-                    "-d",
-                    extract_dir_path
-                ]
-                # https://stackoverflow.com/a/39629367/4723940
-                logger.info(command_to_exec)
-                t_response = subprocess.check_output(
-                    command_to_exec, stderr=subprocess.STDOUT)
+                shutil.unpack_archive(saved_file_path, extract_dir_path)
+                # files = [f for f in glob(extract_dir_path,recursive=True) if os.path.isfile(f)]
+                # filename = set(list(files))
+
+                # command_to_exec = [
+                #     "unzip",
+                #     "-o",
+                #     saved_file_path,
+                #     # extract_dir_path,
+                #     "-d",
+                #     extract_dir_path
+                # ]
+                # # https://stackoverflow.com/a/39629367/4723940
+                # logger.info(command_to_exec)
+                # t_response = subprocess.check_output(
+                #     command_to_exec, stderr=subprocess.STDOUT)
                 # https://stackoverflow.com/a/26178369/4723940
             except:
                 try:

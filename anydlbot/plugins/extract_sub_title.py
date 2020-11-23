@@ -3,15 +3,18 @@
 # (c) Shrimadhav U K
 
 # the logging things
+from helper_funcs.chat_base import TRChatBase
+from translation import Translation
+import pyrogram
+import time
+import subprocess
+import os
 import logging
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-import os
-import subprocess
-import time
 
 # the secret configuration specific things
 if bool(os.environ.get("WEBHOOK", False)):
@@ -20,13 +23,8 @@ else:
     from sample_config import Config
 
 # the Strings used for this "thing"
-import pyrogram
-
-from translation import Translation
 
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
-
-from helper_funcs.chat_base import TRChatBase
 
 
 def extractsubtitle(video_file, output_directory):
@@ -39,7 +37,8 @@ def extractsubtitle(video_file, output_directory):
         out_put_file_name
     ]
     logger.info(command_to_execute)
-    p = subprocess.Popen(command_to_execute, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    p = subprocess.Popen(command_to_execute,
+                         stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     if not p.returncode and os.path.lexists(video_file):
         return out_put_file_name
     else:

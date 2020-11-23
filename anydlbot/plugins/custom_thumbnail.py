@@ -3,23 +3,22 @@
 # (c) Shrimadhav U K
 
 # the logging things
+from translation import Translation
+from pyrogram import Client, Filters
+from PIL import Image
+from anydlbot import AUTH_USERS, DOWNLOAD_LOCATION
+import time
+import os
 import logging
 
 logging.basicConfig(
-    level=logging.DEBUG, 
+    level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 LOGGER = logging.getLogger(__name__)
 
-import os
-import time
 
-from PIL import Image
-from pyrogram import Client, Filters
-
-from anydlbot import AUTH_USERS, DOWNLOAD_LOCATION
 # the Strings used for this "thing"
-from translation import Translation
 
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
@@ -34,7 +33,8 @@ async def save_photo(bot, update):
         )
         return
     # received single photo
-    download_location = DOWNLOAD_LOCATION + "/" + str(update.from_user.id) + ".jpg"
+    download_location = DOWNLOAD_LOCATION + \
+        "/" + str(update.from_user.id) + ".jpg"
     await bot.download_media(
         message=update,
         file_name=download_location
