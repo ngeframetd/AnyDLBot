@@ -11,8 +11,8 @@ from glob import glob
 
 import pyrogram
 # the logging things
-from helper_funcs.chat_base import TRChatBase
-from helper_funcs.display_progress import humanbytes, progress_for_pyrogram
+from anydlbot.helper_funcs.chat_base import TRChatBase
+from anydlbot.helper_funcs.display_progress import humanbytes, progress_for_pyrogram
 from translation import Translation
 
 logging.basicConfig(level=logging.DEBUG,
