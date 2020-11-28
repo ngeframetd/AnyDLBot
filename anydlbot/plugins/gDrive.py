@@ -4,8 +4,8 @@
 
 # the logging things
 from pydrive.auth import GoogleAuth
-from helper_funcs.display_progress import humanbytes
-from helper_funcs.chat_base import TRChatBase
+from anydlbot.helper_funcs.display_progress import humanbytes
+from anydlbot.helper_funcs.chat_base import TRChatBase
 from translation import Translation
 import pyrogram
 from datetime import datetime
