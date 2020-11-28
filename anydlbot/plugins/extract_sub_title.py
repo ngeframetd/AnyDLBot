@@ -3,7 +3,7 @@
 # (c) Shrimadhav U K
 
 # the logging things
-from helper_funcs.chat_base import TRChatBase
+from anydlbot.helper_funcs.chat_base import TRChatBase
 from translation import Translation
 import pyrogram
 import time
